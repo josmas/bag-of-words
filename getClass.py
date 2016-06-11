@@ -37,7 +37,8 @@ else:
     image_paths = [args["image"]]
 
 # Create feature extraction and keypoint detector objects
-sift = cv2.xfeatures2d.SIFT_create()
+# sift = cv2.xfeatures2d.SIFT_create()  # Uncomment to use SIFT
+fea_det = cv2.ORB_create()  # Comment to use SIFT
 
 # List where all the descriptors are stored
 des_list = []
@@ -47,7 +48,8 @@ for image_path in image_paths:
     if im is None:
         print "No such file {}\nCheck if the file exists".format(image_path)
         exit()
-    kp, des = sift.detectAndCompute(im, None)
+    # kp, des = sift.detectAndCompute(im, None)  # Uncomment to use SIFT
+    kp, des = fea_det.detectAndCompute(im, None)  # Comment to use SIFT
     des_list.append((image_path, des))
 
 # Stack all the descriptors vertically in a numpy array

@@ -36,21 +36,24 @@ for training_name in training_names:
 
 # Create feature extraction and keypoint detector object
 print("Creating SIFT keypoints and descriptors: %s" % str(datetime.datetime.now()))
-sift = cv2.xfeatures2d.SIFT_create()
+# sift = cv2.xfeatures2d.SIFT_create()  # Uncomment to use SIFT
+fea_det = cv2.ORB_create()  # Comment to use SIFT
 
 # List where all the descriptors are stored
 des_list = []
 
 for image_path in image_paths:
     im = cv2.imread(image_path)
-    kp, des = sift.detectAndCompute(im, None)
+    # kp, des = sift.detectAndCompute(im, None)  # Uncomment to use SIFT
+    kp, des = fea_det.detectAndCompute(im, None)  # Comment to use SIFT
     des_list.append((image_path, des))
 
 print("Stacking descriptors: %s" % str(datetime.datetime.now()))
 # Stack all the descriptors vertically in a numpy array
 descriptors = des_list[0][1]
 for image_path, descriptor in des_list[1:]:
-    descriptors = np.vstack((descriptors, descriptor))
+    # descriptors = np.vstack((descriptors, descriptor))  #  Uncomment to use SIFT
+    descriptors = np.vstack((descriptors.astype(float), descriptor))  # Comment to use SIFT
 
 # Perform k-means clustering
 print("Performing k-means clustering: %s" % str(datetime.datetime.now()))
