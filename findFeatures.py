@@ -34,16 +34,14 @@ for training_name in training_names:
     class_id += 1
 
 # Create feature extraction and keypoint detector objects
-fea_det = cv2.FeatureDetector_create("SIFT")
-des_ext = cv2.DescriptorExtractor_create("SIFT")
+sift = cv2.xfeatures2d.SIFT_create()
 
 # List where all the descriptors are stored
 des_list = []
 
 for image_path in image_paths:
     im = cv2.imread(image_path)
-    kpts = fea_det.detect(im)
-    kpts, des = des_ext.compute(im, kpts)
+    kp, des = sift.detectAndCompute(im, None)
     des_list.append((image_path, des))
 
 # Stack all the descriptors vertically in a numpy array

@@ -37,8 +37,7 @@ else:
     image_paths = [args["image"]]
 
 # Create feature extraction and keypoint detector objects
-fea_det = cv2.FeatureDetector_create("SIFT")
-des_ext = cv2.DescriptorExtractor_create("SIFT")
+sift = cv2.xfeatures2d.SIFT_create()
 
 # List where all the descriptors are stored
 des_list = []
@@ -48,8 +47,7 @@ for image_path in image_paths:
     if im is None:
         print "No such file {}\nCheck if the file exists".format(image_path)
         exit()
-    kpts = fea_det.detect(im)
-    kpts, des = des_ext.compute(im, kpts)
+    kp, des = sift.detectAndCompute(im, None)
     des_list.append((image_path, des))
 
 # Stack all the descriptors vertically in a numpy array
@@ -74,6 +72,12 @@ test_features = stdSlr.transform(test_features)
 
 # Perform the predictions
 predictions = [classes_names[i] for i in clf.predict(test_features)]
+
+# Compute a number of good replies and the percentage
+result_zip = zip(image_paths, predictions)
+good_answers = [True for k, v in result_zip if v in k]
+print "%d good answers out of %d" % (len(good_answers), len(result_zip))
+print "Percentage of good answers: %d" % (len(good_answers) / len(result_zip) * 100)
 
 # Visualize the results, if "visualize" flag set to true by the user
 if args["visualize"]:
