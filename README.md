@@ -28,13 +28,3 @@ The `--visualize` flag will display the image with the corresponding label print
 
 * Testing a single image
 `python getClass.py -i dataset/test/aeroplane/test_1.jpg --visualize`
-
-# Troubleshooting
-
-If you get 
-
-`
-AttributeError: 'LinearSVC' object has no attribute 'classes_'
-`
-
-error, then simply retrain the model. 
