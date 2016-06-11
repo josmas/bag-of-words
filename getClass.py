@@ -73,6 +73,10 @@ test_features = stdSlr.transform(test_features)
 # Perform the predictions
 predictions = [classes_names[i] for i in clf.predict(test_features)]
 
+# Perform predictions for probabilities for each of the classes
+probs = clf.predict_proba(test_features)
+print("Probs for all are: " + str(probs))
+
 # Compute a number of good replies and the percentage
 result_zip = zip(image_paths, predictions)
 good_answers = [True for k, v in result_zip if v in k]

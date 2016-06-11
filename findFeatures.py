@@ -5,7 +5,7 @@ import cv2
 import imutils
 import numpy as np
 import os
-from sklearn.svm import LinearSVC
+from sklearn.linear_model import LogisticRegression
 from sklearn.externals import joblib
 from scipy.cluster.vq import *
 from sklearn.preprocessing import StandardScaler
@@ -77,11 +77,12 @@ print("Scaling the words: %s" % str(datetime.datetime.now()))
 stdSlr = StandardScaler().fit(im_features)
 im_features = stdSlr.transform(im_features)
 
-# Train the Linear SVM
-print("Training the Linear regression: %s" % str(datetime.datetime.now()))
-clf = LinearSVC()
+# Train the Logistic Regression
+print("Training the Logistic regression: %s" % str(datetime.datetime.now()))
+# Moved to LogisticRegresion so that we can ask the classifier for probabilities
+# http://stackoverflow.com/questions/26478000/converting-linearsvcs-decision-function-to-probabilities-scikit-learn-python
+clf = LogisticRegression(n_jobs=-1)  # use all cores
 clf.fit(im_features, np.array(image_classes))
 
 print("Saving to pkl file: %s" % str(datetime.datetime.now()))
-# Save the SVM
 joblib.dump((clf, training_names, stdSlr, k, voc), "bof.pkl", compress=3)
